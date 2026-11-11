@@ -16,6 +16,8 @@
 <tr><td>Claims of machine consciousness issued</td><td>0</td></tr>
 <tr><td>Press releases</td><td>0</td></tr>
 <tr><td>Results suppressed for being embarrassing</td><td>0</td></tr>
+<tr><td>Benchmark baselines actually run</td><td>1</td></tr>
+<tr><td>House controllers outpaced by a coin flip, on one metric</td><td>1</td></tr>
 </table></div>
 
 <section class="section"><h2><span class="no">The framework</span>Three questions, asked of everything we build</h2>
@@ -28,9 +30,15 @@
 <p><a href="/research/">The full framework, and the detailed research agenda &rarr;</a></p></section>
 <p class="bubble" style="margin-top:20px">(A note from the narrator, who is also the entire staff: a homepage that reports its own score as &ldquo;1, in a simple environment&rdquo; is either an institute with nothing to sell, or the most committed piece of performance art in machine learning. The data is real, the criteria were fixed in advance, and performance art has never once kept an audit log. Draw your own conclusions; we did, and published them.)</p>
 
-<div class="predict"><h3>&#9873; Open for predictions &mdash; the next experiment</h3>
-<p><strong>Does recorded experience actually help, or does a simple note of the most recent events do just as well?</strong> Our programme <a href="/projects/3n1/">3N1</a> has prepared a controlled benchmark comparing adaptation from recorded experience against a simpler recency-based controller. The pass criteria were fixed before the run. The run has not happened yet.</p>
-<p>Readers are invited to register a prediction &mdash; pass, miss, or death by wall &mdash; and keep their own score at home. We shall keep ours here, in public, either way. Predicting the outcome of an experiment before it runs is, in the trade, called <em>preregistration</em>. We find it concentrates the mind wonderfully.</p></div>
+<div class="predict"><h3>&#9873; The benchmark &mdash; baseline run, predictions still open</h3>
+<p><strong>Does recorded experience actually help, or does a simple note of the most recent events do just as well?</strong> The benchmark is <a href="/projects/3n1/">3N1</a>'s: sixty trials, one unannounced reversal of the rewards halfway through, criteria fixed before anyone ran anything. The first half is now complete: the scripted controllers have posted their numbers, over ten runs each.</p>
+<table class="verdict"><tr><th>Controller</th><th>Stabilised after the change</th><th>Runs that never stabilised</th><th>Mean reward after the change</th></tr>
+<tr><td><strong>Recency</strong> (the bar)</td><td>Median trial 41.5</td><td>6 of 10</td><td>1.46</td></tr>
+<tr><td>Random (a coin, essentially)</td><td>Median trial 38</td><td>5 of 10</td><td>0.63</td></tr>
+<tr><td>Average of all history</td><td>&mdash;</td><td>10 of 10</td><td>&minus;0.85</td></tr>
+<tr><td>Fixed (never changes its mind)</td><td>&mdash;</td><td>10 of 10</td><td>&minus;3.00</td></tr></table>
+<p>The Institute draws readers' attention, without comment (almost), to two features of this table. First: the controller with the <em>most complete memory</em> &mdash; the one averaging everything that ever happened &mdash; was the worst adapter in the field, a result received at an institute devoted to persistence with professional composure and a short silence. Second: on speed of stabilising, the house benchmark was outpaced by a coin. The coin earned less, settled sooner, and has been unbearable about it.</p>
+<p><strong>Still to run:</strong> the actual contestants &mdash; the full agent loop, with recorded experience and external memory, against this bar. It must beat Recency on <em>both</em> columns to pass. Predictions remain open: pass, miss, or death by wall. The result will be published here either way; the Institute's predictions policy differs from the coin's in that ours are written down.</p></div>
 
 <section class="section"><h2><span class="no">From the obituaries</span>Latest death in the laboratory</h2>
 <div class="obit"><h3>&dagger; Emerson v0.10</h3><div class="dates">Active learning by ensemble disagreement &middot; Discontinued after testing</div>
