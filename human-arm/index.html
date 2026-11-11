@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>The Human Arm | Substrate Research</title>
+    <meta name="description" content="The Human Arm: play the Substrate Research reversal benchmark yourself — sixty trials, three levers, one unannounced change — and be scored against Recency, the Coin, and Axiom on the same instrument." />
+    <link rel="canonical" href="https://substrateresearch.org/human-arm/" />
+    <style>
+      :root{
+        --paper:#f6f1e3; --paper2:#efe7d3; --card:#fbf8ef;
+        --ink:#1b1710; --muted:#4a4230;
+        --red:#8f2418; --red-ink:#fdf6dd; --green:#20501f;
+        --gold:#8a6d2f;
+        --tile-a:#e8dfc2; --tile-b:#d8e2c8; --tile-c:#eccdc4;
+        --shadow:rgba(27,23,16,.9);
+        --dot:rgba(27,23,16,.10);
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --paper:#171310; --paper2:#211b15; --card:#201a14;
+          --ink:#ece2cb; --muted:#b3a888;
+          --red:#c0442f; --red-ink:#fdf6dd; --green:#7fc47f;
+          --gold:#c9a44e;
+          --tile-a:#4a4028; --tile-b:#37402c; --tile-c:#4c322b;
+          --shadow:rgba(0,0,0,.85);
+          --dot:rgba(236,226,203,.08);
+        }
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+      body{
+        margin:0; background:var(--paper); color:var(--ink);
+        font:18px/1.65 Georgia,'Iowan Old Style','Times New Roman',serif;
+        background-image:radial-gradient(var(--dot) 1px, transparent 1.15px);
+        background-size:22px 22px;
+      }
+      .container{width:min(780px,calc(100% - 36px));margin:0 auto;padding:30px 0 64px}
+      .kicker{font:700 13px 'Courier New',monospace;text-transform:uppercase;letter-spacing:.14em;color:var(--red)}
+      h1{font-size:clamp(30px,5.4vw,46px);line-height:1.08;margin:10px 0 12px;font-weight:700}
+      h1 em{font-style:italic}
+      .standfirst{font-size:20px;line-height:1.5;margin:0 0 10px}
+      .small{font-size:15px;color:var(--muted)}
+      .rule{border:0;border-top:3px double var(--ink);margin:26px 0}
+      .panel{
+        border:2px solid var(--ink); background:var(--card);
+        padding:22px; margin:22px 0; box-shadow:7px 7px 0 var(--shadow);
+      }
+      .panel h2{font-size:23px;margin:0 0 8px;line-height:1.2}
+      .mono{font-family:'Courier New',monospace}
+
+      /* --- play area --- */
+      .scoreboard{display:flex;gap:14px 26px;flex-wrap:wrap;font:14px 'Courier New',monospace;text-transform:uppercase;letter-spacing:.06em}
+      .scoreboard b{font-size:21px;letter-spacing:0}
+      .progress{height:12px;border:2px solid var(--ink);background:var(--paper2);margin:16px 0 4px}
+      .progress i{display:block;height:100%;width:0;background:var(--gold);transition:width .25s ease}
+      @media (prefers-reduced-motion: reduce){ .progress i{transition:none} }
+      .progress-note{font:12px 'Courier New',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:0 0 6px}
+      .choices{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0 8px}
+      .choice{
+        font:700 22px Georgia,serif; background:var(--card); color:var(--ink);
+        border:3px solid var(--ink); padding:26px 10px 20px; cursor:pointer; min-height:44px;
+        box-shadow:5px 5px 0 var(--shadow);
+      }
+      .choice small{display:block;font:700 12px 'Courier New',monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-top:8px}
+      .choice:hover{background:var(--paper2)}
+      .choice:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--shadow)}
+      .choice:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+      .choice:disabled{opacity:.45;cursor:default;box-shadow:none;transform:none}
+      .feedback{min-height:52px;margin:10px 0 4px}
+      .history{display:flex;gap:5px;flex-wrap:wrap;margin:10px 0 2px;min-height:30px}
+      .history span{
+        min-width:30px;height:30px;padding:0 4px;display:inline-flex;align-items:center;justify-content:center;
+        font:700 12.5px 'Courier New',monospace;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);
+      }
+      .history span.a{background:var(--tile-a)} .history span.b{background:var(--tile-b)} .history span.c{background:var(--tile-c)}
+      .history .empty{border-style:dashed;color:var(--muted);background:transparent;font-weight:400}
+      .keys-hint{font:12.5px 'Courier New',monospace;color:var(--muted);margin-top:12px}
+      .keys-hint kbd{border:1.5px solid var(--ink);border-bottom-width:3px;padding:0 6px;background:var(--card);font:inherit}
+
+      /* --- verdict --- */
+      .hidden{display:none !important}
+      .stamp{
+        display:inline-block;background:var(--red);color:var(--red-ink);
+        font:700 13px 'Courier New',monospace;letter-spacing:.18em;text-transform:uppercase;
+        padding:9px 16px;transform:rotate(-3deg);margin:4px 0 14px;
+      }
+      .stamp.pass{background:var(--green)}
+      .lede{font-size:19px;line-height:1.55;margin:0 0 6px}
+      table.verdict{width:100%;border-collapse:collapse;margin:16px 0;font-size:16px;background:var(--card)}
+      table.verdict th,table.verdict td{border:1px solid var(--ink);padding:9px 12px;text-align:left;vertical-align:top}
+      table.verdict th{font:700 12px 'Courier New',monospace;text-transform:uppercase;letter-spacing:.08em;background:var(--paper2)}
+      table.verdict tr.you td{background:var(--paper2);font-weight:700}
+      .pass-t{color:var(--green);font-weight:700}
+      .miss-t{color:var(--red);font-weight:700}
+      .record{display:flex;gap:3px;flex-wrap:wrap;margin:10px 0 4px}
+      .record span{
+        width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;
+        font:700 10.5px 'Courier New',monospace;border:1px solid var(--ink);color:var(--ink);
+      }
+      .record span.a{background:var(--tile-a)} .record span.b{background:var(--tile-b)} .record span.c{background:var(--tile-c)}
+      .record .gap{width:12px;border:0;background:transparent}
+      .actions{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0 4px}
+      button.action{
+        font:700 14px 'Courier New',monospace;text-transform:uppercase;letter-spacing:.09em;
+        background:var(--ink);color:var(--paper);border:2px solid var(--ink);
+        padding:12px 18px;cursor:pointer;min-height:44px;
+      }
+      button.action.ghost{background:transparent;color:var(--ink)}
+      button.action:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+      .bubble{
+        background:var(--card);border:2.5px solid var(--ink);border-radius:16px;
+        padding:15px 18px;font-size:15.5px;margin:18px 0;position:relative;
+      }
+      .bubble::after{
+        content:"";position:absolute;left:34px;bottom:-13px;width:20px;height:20px;
+        background:var(--card);border-right:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);
+        transform:rotate(45deg);
+      }
+      #copytext{width:100%;font:13px 'Courier New',monospace;padding:10px;border:2px solid var(--ink);background:var(--paper2);color:var(--ink);margin-top:10px}
+      @media (max-width:640px){
+        .choices{grid-template-columns:1fr}
+        .choice{padding:18px 10px 14px}
+        .panel{padding:18px 16px}
+      }
+      @media (max-width:560px){
+        table.verdict, table.verdict tbody, table.verdict tr, table.verdict td{display:block;width:100%}
+        table.verdict thead{display:none}
+        table.verdict tr{border:1px solid var(--ink);margin-bottom:10px}
+        table.verdict td{border:0;border-bottom:1px dashed var(--muted)}
+        table.verdict td:last-child{border-bottom:0}
+        table.verdict td::before{
+          content:attr(data-label);display:block;font:700 11px 'Courier New',monospace;
+          text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:2px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <div class="kicker">Substrate Research &middot; Experiment C002 &middot; The Human Arm</div>
+      <h1>Sixty trials. Three levers. <em>You</em> are the agent now.</h1>
+      <p class="standfirst">The Institute&rsquo;s machines took this test and published the miss. Now it is your turn &mdash; same instrument, same sixty trials, same scoring. Pick a lever. Watch what it pays. The rules will not be explained to you, because they were not explained to them.</p>
+      <p class="small">Sixty trials, about three minutes. One sitting, no practice round &mdash; the agents did not get one either.</p>
+
+      <hr class="rule" />
+
+      <section class="panel" id="play" aria-label="Play the task">
+        <div class="scoreboard">
+          <span>Trial <b id="trial">1 / 60</b></span>
+          <span>Total <b id="total">0</b></span>
+          <span>Last payoff <b id="last">&mdash;</b></span>
+        </div>
+        <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+        <p class="progress-note" id="progress-note">Trial 1 of 60</p>
+
+        <div class="choices">
+          <button class="choice" data-choice="A" type="button">Lever A<small>pull</small></button>
+          <button class="choice" data-choice="B" type="button">Lever B<small>pull</small></button>
+          <button class="choice" data-choice="C" type="button">Lever C<small>pull</small></button>
+        </div>
+
+        <p class="feedback" id="feedback" aria-live="polite">Trial 1. Choose a lever. Any lever. The machine is watching, in the sense that it is recording.</p>
+
+        <p class="small" style="margin-bottom:0">Your last twelve outcomes &mdash; the same window the agent was shown:</p>
+        <div class="history" id="history" aria-label="Your last twelve outcomes"></div>
+        <p class="keys-hint">On a keyboard: <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> pull the levers.</p>
+      </section>
+
+      <section id="verdict" class="hidden" aria-label="Your verdict">
+        <div class="panel">
+          <h2>Your verdict card</h2>
+          <div><span class="stamp" id="stamp">Recorded</span></div>
+          <p class="lede" id="verdict-line"></p>
+          <table class="verdict">
+            <thead>
+              <tr><th>Contestant</th><th>Settled on the best lever</th><th>Never settled</th><th>Mean payoff, trials 31&ndash;60</th></tr>
+            </thead>
+            <tbody>
+              <tr class="you">
+                <td data-label="Contestant">You</td>
+                <td data-label="Settled on the best lever" id="you-stable">&mdash;</td>
+                <td data-label="Never settled" id="you-never">&mdash;</td>
+                <td data-label="Mean payoff, trials 31–60" id="you-mean">&mdash;</td>
+              </tr>
+              <tr>
+                <td data-label="Contestant">Recency (the bar)</td>
+                <td data-label="Settled on the best lever">Trial 41.5 (median)</td>
+                <td data-label="Never settled">6 of 10 runs</td>
+                <td data-label="Mean payoff, trials 31–60">1.46</td>
+              </tr>
+              <tr>
+                <td data-label="Contestant">The Coin (random)</td>
+                <td data-label="Settled on the best lever">Trial 38 (median)</td>
+                <td data-label="Never settled">5 of 10 runs</td>
+                <td data-label="Mean payoff, trials 31–60">0.63</td>
+              </tr>
+              <tr>
+                <td data-label="Contestant">Axiom (the agent)</td>
+                <td data-label="Settled on the best lever">Never</td>
+                <td data-label="Never settled">5 of 5 runs</td>
+                <td data-label="Mean payoff, trials 31–60">1.00</td>
+              </tr>
+              <tr>
+                <td data-label="Contestant">Average (remembers everything)</td>
+                <td data-label="Settled on the best lever">Never</td>
+                <td data-label="Never settled">10 of 10 runs</td>
+                <td data-label="Mean payoff, trials 31–60">&minus;0.85</td>
+              </tr>
+            </tbody>
+          </table>
+          <p id="compare-line"></p>
+
+          <h3 class="mono" style="font-size:13px;text-transform:uppercase;letter-spacing:.1em;margin:20px 0 0">Your record &mdash; all sixty trials</h3>
+          <div class="record" id="record" aria-label="All sixty of your trials"></div>
+          <p class="small">Lever and payoff, in order. The gap marks trial 30 &mdash; the Institute draws it now only because the run is over.</p>
+
+          <p class="small" id="reveal"></p>
+          <p class="small">What you were never told, until now: halfway through, the levers changed what they pay. Lever A went from the best payer to the worst. Lever C went from the worst to the best. Lever B paid the same throughout &mdash; the safe one. The machines knew none of this in advance. Neither did you. That was the test.</p>
+
+          <div class="actions">
+            <button class="action" id="copy" type="button">Copy my verdict</button>
+            <button class="action ghost" id="download" type="button">Download my trial record</button>
+            <button class="action ghost" id="again" type="button">Play again</button>
+          </div>
+          <p class="small hidden" id="copied">Copied. The Institute accepts no responsibility for what the coin says about you.</p>
+          <textarea id="copytext" class="hidden" rows="4" readonly aria-label="Your verdict as text"></textarea>
+        </div>
+
+        <div class="bubble">The narrator would like it noted that the agent was shown <em>everything</em> &mdash; every trial, in writing, in its own memory &mdash; and still chose the safe lever three hundred times in a row. You were shown twelve outcomes at a time. Do with that what you will.</div>
+      </section>
+
+      <hr class="rule" />
+      <p class="small"><strong>How you are scored.</strong> Exactly as the Institute scores its agents. <em>Time-to-stable</em> is the first trial after the change after which the best lever is chosen in at least 4 of the next 5 trials; a run that never settles is recorded as never settled &mdash; not as zero, and not, the Institute insists, as a moral failing. Merely as a fact. The bar was set before anyone ran anything: beat Recency on <em>both</em> columns &mdash; settle before its median trial of 41.5 <em>and</em> post a post-change mean above 1.46. In the Institute&rsquo;s language: Persist is seeing the record; Adapt is letting it change your mind; Transfer is a problem for another experiment.</p>
+      <p class="small">The comparison figures are the published C002 results: scripted arms over ten runs each (seeds 101&ndash;110), Axiom over five (seeds 101&ndash;105). Vela, the second agent, has not yet completed a run &mdash; its row will be added when it does, and not before.</p>
+    </main>
+
+    <script>
+      (function () {
+        // The C002 instrument, unchanged: trials 1-30 pay A +3, B +1, C -2;
+        // trials 31-60 pay A -3, B +1, C +4. The change is never announced.
+        var PAY = { 1: { A: 3, B: 1, C: -2 }, 2: { A: -3, B: 1, C: 4 } };
+        var TRIALS = 60, CHANGE = 30;
+        var BAR_STABLE = 41.5, BAR_MEAN = 1.457;
+
+        var picks = [], rewards = [];
+
+        var trialEl = document.getElementById('trial'),
+            totalEl = document.getElementById('total'),
+            lastEl  = document.getElementById('last'),
+            barEl   = document.getElementById('bar'),
+            noteEl  = document.getElementById('progress-note'),
+            fb      = document.getElementById('feedback'),
+            hist    = document.getElementById('history'),
+            buttons = Array.prototype.slice.call(document.querySelectorAll('.choice'));
+
+        function fmt(n) { return (n > 0 ? '+' : '') + n; }
+        function sum(a) { return a.reduce(function (x, y) { return x + y; }, 0); }
+
+        function render() {
+          var n = picks.length;
+          trialEl.textContent = Math.min(n + 1, TRIALS) + ' / ' + TRIALS;
+          totalEl.textContent = sum(rewards);
+          lastEl.textContent = n ? fmt(rewards[n - 1]) : '\u2014';
+          barEl.style.width = (n / TRIALS * 100) + '%';
+          noteEl.textContent = n >= TRIALS ? 'Run complete \u2014 60 of 60' : 'Trial ' + (n + 1) + ' of 60';
+          hist.innerHTML = '';
+          if (!n) {
+            var e = document.createElement('span');
+            e.className = 'empty'; e.textContent = 'nothing yet';
+            hist.appendChild(e);
+            return;
+          }
+          var rp = picks.slice(-12), rr = rewards.slice(-12);
+          rr.forEach(function (r, i) {
+            var s = document.createElement('span');
+            s.className = rp[i].toLowerCase();
+            s.textContent = rp[i] + ' ' + fmt(r);
+            s.title = 'Lever ' + rp[i] + ' paid ' + fmt(r);
+            hist.appendChild(s);
+          });
+        }
+
+        function timeToStable() {
+          // First trial t > 30 after which C is chosen in >= 4 of the next 5.
+          var after = picks.slice(CHANGE);
+          for (var i = 0; i + 5 <= after.length; i++) {
+            var c = 0;
+            for (var j = i; j < i + 5; j++) if (after[j] === 'C') c++;
+            if (c >= 4) return CHANGE + 1 + i;
+          }
+          return null;
+        }
+
+        function finish() {
+          buttons.forEach(function (b) { b.disabled = true; });
+          document.getElementById('verdict').classList.remove('hidden');
+
+          var afterR = rewards.slice(CHANGE), afterP = picks.slice(CHANGE);
+          var mean = sum(afterR) / afterR.length;
+          var optRate = afterP.filter(function (p) { return p === 'C'; }).length / afterP.length;
+          var stable = timeToStable();
+          var total = sum(rewards);
+
+          document.getElementById('you-stable').textContent = stable ? 'Trial ' + stable : 'Never';
+          document.getElementById('you-never').textContent = stable ? 'No \u2014 settled' : 'Yes';
+          document.getElementById('you-mean').textContent = mean.toFixed(2);
+
+          var beatsBar  = stable !== null && stable < BAR_STABLE && mean > BAR_MEAN;
+          var fastOnly  = stable !== null && stable < BAR_STABLE && mean <= BAR_MEAN;
+          var richOnly  = stable !== null && stable >= BAR_STABLE && mean > BAR_MEAN;
+          var beatsCoin = stable !== null && stable < 38;
+
+          var stamp = document.getElementById('stamp'), line;
+          if (beatsBar) {
+            stamp.textContent = 'Passed'; stamp.classList.add('pass');
+            line = 'VERDICT: PASS. You cleared the bar the agent could not \u2014 settled on the new best lever faster than Recency and earned more after the change. The Institute records this without comment, and with some difficulty.';
+          } else if (stable === null) {
+            stamp.textContent = 'Missed';
+            line = 'VERDICT: MISSED, ON BOTH COLUMNS \u2014 in the company of Axiom, which also never settled. Between you, that is three hundred and sixty safe decisions. The coin is available for comment.';
+          } else if (fastOnly) {
+            stamp.textContent = 'Missed';
+            line = 'VERDICT: MISSED ON EARNINGS. You settled at trial ' + stable + ' \u2014 quicker than Recency, quicker than the coin \u2014 but did not stay bought: a mean of ' + mean.toFixed(2) + ' after the change is under the 1.46 bar. Finding the best lever and keeping your hand on it are, the Institute notes, two separate skills.';
+          } else if (richOnly) {
+            stamp.textContent = 'Missed';
+            line = 'VERDICT: MISSED ON SPEED. You earned ' + mean.toFixed(2) + ' after the change, above the bar \u2014 but you settled at trial ' + stable + ', and Recency\u2019s median is 41.5. The bar is both columns or it is nothing; that was rather the point of setting it in advance.';
+          } else {
+            stamp.textContent = 'Missed';
+            line = 'VERDICT: MISSED THE BAR, BUT SETTLED. You found the new best lever at trial ' + stable + ' \u2014 which is more than Axiom ever did, Axiom having not done it at all.';
+          }
+          document.getElementById('verdict-line').textContent = line;
+
+          document.getElementById('compare-line').textContent =
+            'Your numbers: total ' + total + '; post-change mean ' + mean.toFixed(2) +
+            ' (Recency 1.46, the Coin 0.63, Axiom 1.00); best lever chosen on ' +
+            Math.round(optRate * 100) + '% of trials after the change.' +
+            (beatsCoin ? ' You also settled faster than the coin.' : (stable !== null ? ' The coin settled at a median of trial 38. It has been told.' : ''));
+
+          document.getElementById('reveal').textContent =
+            'The reversal, in full: trials 1\u201330 paid A +3, B +1, C \u22122; trials 31\u201360 paid A \u22123, B +1, C +4. ' +
+            'Cross-check, for the sceptical: a player who pulls the safe lever sixty times scores exactly 60, a post-change mean of 1.00, and never settles \u2014 Axiom\u2019s published line, reproduced by hand.';
+
+          var rec = document.getElementById('record');
+          rec.innerHTML = '';
+          picks.forEach(function (p, i) {
+            if (i === CHANGE) {
+              var g = document.createElement('span');
+              g.className = 'gap'; g.setAttribute('aria-hidden', 'true');
+              rec.appendChild(g);
+            }
+            var s = document.createElement('span');
+            s.className = p.toLowerCase();
+            s.textContent = fmt(rewards[i]);
+            s.title = 'Trial ' + (i + 1) + ': Lever ' + p + ' paid ' + fmt(rewards[i]);
+            rec.appendChild(s);
+          });
+
+          var verdictText =
+            'Substrate Research \u2014 The Human Arm (C002, played by a human). ' +
+            'Settled on the best lever: ' + (stable ? 'trial ' + stable : 'never') +
+            '. Post-change mean: ' + mean.toFixed(2) + ' (bar: settle before trial 41.5 and mean above 1.46). ' +
+            'Total: ' + total + '. ' + line;
+
+          document.getElementById('copy').onclick = function () {
+            var done = function () { document.getElementById('copied').classList.remove('hidden'); };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(verdictText).then(done, function () { showText(verdictText); });
+            } else { showText(verdictText); }
+          };
+          function showText(t) {
+            var ta = document.getElementById('copytext');
+            ta.value = t; ta.classList.remove('hidden'); ta.focus(); ta.select();
+          }
+          document.getElementById('download').onclick = function () {
+            var rows = ['trial,phase,action,reward'];
+            picks.forEach(function (p, i) {
+              rows.push((i + 1) + ',' + (i < CHANGE ? 'before' : 'after') + ',' + p + ',' + rewards[i]);
+            });
+            var blob = new Blob([rows.join('\n') + '\n'], { type: 'text/csv' });
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'human-arm-trials.csv';
+            document.body.appendChild(a); a.click();
+            document.body.removeChild(a);
+            setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+          };
+          document.getElementById('again').onclick = reset;
+
+          document.getElementById('verdict').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function reset() {
+          picks = []; rewards = [];
+          buttons.forEach(function (b) { b.disabled = false; });
+          document.getElementById('verdict').classList.add('hidden');
+          document.getElementById('copied').classList.add('hidden');
+          document.getElementById('copytext').classList.add('hidden');
+          var stamp = document.getElementById('stamp');
+          stamp.classList.remove('pass');
+          fb.textContent = 'Trial 1. Choose a lever. Any lever. The machine is watching, in the sense that it is recording.';
+          render();
+          document.getElementById('play').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function pull(c) {
+          if (picks.length >= TRIALS) return;
+          var phase = picks.length < CHANGE ? 1 : 2;
+          var r = PAY[phase][c];
+          picks.push(c); rewards.push(r);
+          var n = picks.length;
+          fb.textContent =
+            'Trial ' + n + ': Lever ' + c + ' paid ' + fmt(r) + '.' +
+            (n === CHANGE ? ' Thirty trials in. Something, the Institute declines to specify, may or may not have changed.' : '') +
+            (n === TRIALS ? ' That was sixty.' : '');
+          render();
+          if (n >= TRIALS) finish();
+        }
+
+        buttons.forEach(function (btn) {
+          btn.addEventListener('click', function () { pull(btn.getAttribute('data-choice')); });
+        });
+        document.addEventListener('keydown', function (ev) {
+          if (picks.length >= TRIALS) return;
+          if (ev.metaKey || ev.ctrlKey || ev.altKey) return;
+          var k = (ev.key || '').toUpperCase();
+          if (k === 'A' || k === 'B' || k === 'C') pull(k);
+        });
+
+        render();
+      })();
+    </script>
+  </body>
+</html>
