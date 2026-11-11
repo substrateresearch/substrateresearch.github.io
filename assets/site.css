@@ -1,28 +1,28 @@
 
-:root{--paper:#f6f1e3;--paper2:#efe7d3;--ink:#1b1710;--muted:#6a604d;--red:#9c2b1e;--gold:#8a6d2f;--rule:#1b1710;--card:#fbf8ef}
+:root{--paper:#f6f1e3;--paper2:#efe7d3;--ink:#1b1710;--muted:#453e2c;--red:#8f2418;--gold:#8a6d2f;--rule:#1b1710;--card:#fbf8ef}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.65 Georgia,'Iowan Old Style','Times New Roman',serif;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--paper);color:var(--ink);font:18px/1.65 Georgia,'Iowan Old Style','Times New Roman',serif;-webkit-font-smoothing:antialiased}
 a{color:var(--red);text-decoration:underline;text-underline-offset:2px}
 a:hover{color:var(--ink)}
 .container{width:min(1060px,calc(100% - 40px));margin:0 auto}
 .skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:#fff;padding:6px 10px;z-index:9}
 /* Masthead */
-.dateline{border-bottom:1px solid var(--ink);font:11px/1.5 'Courier New',monospace;text-transform:uppercase;letter-spacing:.08em}
-.dateline .container{display:flex;justify-content:space-between;gap:16px;padding:7px 0;flex-wrap:wrap;color:var(--muted)}
+.dateline{border-bottom:1px solid var(--ink);font:12px/1.5 'Courier New',monospace;text-transform:uppercase;letter-spacing:.08em}
+.dateline .container{display:flex;justify-content:space-between;gap:16px;padding:7px 0;flex-wrap:wrap;color:#3d3728)}
 .nameplate{text-align:center;padding:26px 16px 6px}
 .nameplate .brandname{font-size:clamp(34px,6.4vw,62px);letter-spacing:.14em;font-weight:700;text-transform:uppercase;line-height:1.05;color:var(--ink);text-decoration:none}
 .nameplate .tagline{font-style:italic;color:var(--muted);margin-top:8px;font-size:16px}
 .nav{border-top:3px double var(--rule);border-bottom:1px solid var(--rule);margin-top:16px}
 .nav .container{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;padding:9px 0}
-.nav a{font:12px 'Courier New',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--ink);text-decoration:none;padding:4px 10px}
+.nav a{font:13px 'Courier New',monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);text-decoration:none;padding:9px 12px;font-weight:700}
 .nav a:hover{color:var(--red)}
 .nav a[aria-current="page"]{background:var(--ink);color:var(--paper)}
 /* Headline zone */
 .pagehead{padding:44px 0 8px;text-align:left}
-.kicker{font:12px 'Courier New',monospace;text-transform:uppercase;letter-spacing:.14em;color:var(--red);margin-bottom:14px}
+.kicker{font:13px 'Courier New',monospace;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--red);margin-bottom:14px}
 h1{font-size:clamp(33px,5.2vw,54px);line-height:1.08;font-weight:700;margin:0 0 16px}
 h1 em{font-style:italic}
-.standfirst{font-size:20px;line-height:1.55;color:#33302a;max-width:46em}
+.standfirst{font-size:21px;line-height:1.55;color:#221e15;max-width:46em}
 .rule{border:0;border-top:1px solid var(--rule);margin:26px 0}
 .rule.thick{border-top:3px solid var(--rule)}
 .section{padding:30px 0 8px}
@@ -30,7 +30,7 @@ h2{font-size:28px;margin:0 0 10px;line-height:1.2}
 h2 .no{font-family:'Courier New',monospace;font-size:15px;color:var(--red);display:block;letter-spacing:.12em;margin-bottom:6px;text-transform:uppercase}
 h3{font-size:20px;margin:0 0 8px}
 p{margin:0 0 14px}.lede{font-size:19px}
-.small{font-size:14px;color:var(--muted)}
+.small{font-size:15px;color:#453e2c}
 .mono{font-family:'Courier New',monospace}
 /* Ledger / scoreboard */
 .ledger{border:2px solid var(--ink);background:var(--card);padding:6px 20px 12px;margin:18px 0}
@@ -61,7 +61,7 @@ p{margin:0 0 14px}.lede{font-size:19px}
 .entry{border-top:1px solid var(--ink);padding:18px 0}
 .entry:first-of-type{border-top:2px solid var(--ink)}
 .entry h3{font-size:22px}
-.entry .meta{font:12px 'Courier New',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
+.entry .meta{font:12.5px 'Courier New',monospace;text-transform:uppercase;letter-spacing:.08em;color:#453e2c;font-weight:700;margin-bottom:6px}
 .entry p{max-width:52em}
 /* Prose pages */
 .prose{max-width:760px}
@@ -77,4 +77,14 @@ table.verdict th{font:12px 'Courier New',monospace;text-transform:uppercase;lett
 .footer .container{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .footer a{color:var(--muted)}
 .colophon{font:12px 'Courier New',monospace;margin-top:10px}
-@media(max-width:820px){.cols{grid-template-columns:1fr}.cols article{border-right:0;border-bottom:1px solid var(--ink)}.cols article:last-child{border-bottom:0}.dateline .container{justify-content:center;text-align:center}}
+body{background-image:radial-gradient(rgba(27,23,16,.10) 1px,transparent 1.15px);background-size:22px 22px}
+.panel{border:3px solid var(--ink);background:#101010;margin:26px 0;box-shadow:9px 9px 0 var(--ink)}
+.panel img{display:block;width:100%;height:auto}
+.panel figcaption{background:var(--card);border-top:3px solid var(--ink);font:13.5px/1.5 'Courier New',monospace;padding:11px 14px;color:var(--ink)}
+.panel figcaption b{text-transform:uppercase;letter-spacing:.1em;color:var(--red)}
+.ledger,.obit{box-shadow:7px 7px 0 rgba(27,23,16,.9)}
+.stamp{display:inline-block;background:var(--red);color:#fdf6dd;border:0;padding:9px 16px;clip-path:polygon(50% 0%,59% 12%,73% 5%,78% 18%,93% 15%,93% 30%,100% 40%,90% 50%,100% 62%,88% 68%,90% 84%,76% 82%,70% 97%,58% 86%,50% 100%,41% 87%,29% 97%,25% 83%,9% 85%,12% 69%,0% 60%,11% 50%,1% 38%,13% 31%,9% 15%,24% 18%,30% 4%,42% 13%);transform:rotate(-3deg)}
+.bubble{background:#fffdf4;border:2.5px solid var(--ink);border-radius:16px;padding:15px 18px;position:relative;font-size:15.5px}
+.bubble::after{content:"";position:absolute;left:44px;bottom:-13px;border-width:13px 9px 0 9px;border-style:solid;border-color:var(--ink) transparent transparent transparent}
+.bubble::before{content:"";position:absolute;left:47px;bottom:-8px;border-width:9px 6px 0 6px;border-style:solid;border-color:#fffdf4 transparent transparent transparent;z-index:1}
+@media(max-width:820px){body{font-size:17.5px}.standfirst{font-size:19.5px}.nameplate .brandname{letter-spacing:.07em}.ledger td{font-size:15.5px}.ledger td:last-child{white-space:normal}.cols{grid-template-columns:1fr}.cols article{border-right:0;border-bottom:1px solid var(--ink)}.cols article:last-child{border-bottom:0}.dateline .container{justify-content:center;text-align:center}}
