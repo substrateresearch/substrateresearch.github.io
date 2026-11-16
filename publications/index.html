@@ -5,14 +5,20 @@
 <p class="standfirst">An evidence-led archive for research notes, experimental reports, technical papers and independent evaluations.</p>
 </div></section>
 <div class="container"><hr class="rule">
-<figure class="panel"><img src="/assets/img/publications-panel.jpg" alt="Comic panel: a tall gothic bookshelf, almost entirely empty, holding exactly two books, while a cloaked figure polishes one of them, under a full moon" loading="lazy" onerror="this.closest('figure').style.display='none'"><figcaption><b>The archive.</b> Three entries, all checked, all permanent. The empty shelves are not a shortage. They are a policy.</figcaption></figure>
+<figure class="panel"><img src="/assets/img/publications-panel.jpg" alt="Comic panel: a tall gothic bookshelf, almost entirely empty, holding exactly two books, while a cloaked figure polishes one of them, under a full moon" loading="lazy" onerror="this.closest('figure').style.display='none'"><figcaption><b>The archive.</b> Four entries, all checked, all permanent. The empty shelves are not a shortage. They are a policy.</figcaption></figure>
 <div class="ledger"><h3>Archive status</h3><table>
-<tr><td>Entries in the archive</td><td>3</td></tr>
+<tr><td>Entries in the archive</td><td>4</td></tr>
 <tr><td>Reports being prepared in the laboratory</td><td>Several</td></tr>
 <tr><td>Unverified reports presented as publications</td><td>0 &mdash; and see below</td></tr>
 </table></div>
 <div class="prose">
 <p>The archive&rsquo;s founding entry arrived the way the Institute hopes all of them will: finished, checked, and deposited somewhere permanent before anyone here thought to build it a shelf. It predates this website by ten days. The Institute regards the ordering as correct &mdash; the record first, the furniture afterwards &mdash; and notes that filling a shelf early with preliminary material, attractively formatted, remains a practice it has observed elsewhere and chosen, with effort, not to imitate.</p>
+<h2>Technical report &mdash; Emerson programme</h2>
+<p><strong>The worlds were not different enough.</strong> Emerson v0.14-transfer &middot; 16 November 2026.</p>
+<p><strong>What was tested.</strong> Transfer: whether a GRU trained on one world (thrust gain 0.4, no drag), fine-tuned on a second (gain 0.8, drag &times;0.90 per step) under the standard adaptation budget, beats the same architecture from scratch on an identical budget, against a bar fixed in the specification before any run.</p>
+<p><strong>What was found.</strong> The test never ran. Its environment check required the trained model to be bad on the new world before adaptation &mdash; zero-shot error above 0.340. It was 0.287: with no exposure to the second world at all, the model already outpredicted every baseline trained on it. The scratch control also barely learned at the comparison&rsquo;s settings, so the bar it generated would have certified nothing. The kill rule closed the form before Stage 2.</p>
+<p><strong>What it does not establish.</strong> That transfer passed a bar &mdash; no bar was ever legitimately in front of it. The zero-shot figure is an observation from a voided test, and the report states it as one, at the same size as the death.</p>
+<p><a href="/publications/the-worlds-were-not-different-enough/">Read the full report &rarr;</a></p>
 <h2>Technical report &mdash; 3N1 programme</h2>
 <p><strong>Three hundred safe decisions.</strong> 3N1 C002 &middot; 15 November 2026.</p>
 <p><strong>What was tested.</strong> Whether the full agent loop &mdash; role, visible environment, external memory &mdash; adapts to an unannounced reward reversal faster than the recency controller that benchmarks it, against a bar fixed in the protocol before any run.</p>
