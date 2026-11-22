@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Emerson, Alive: the actual world model from Substrate Research's published v0.12-drift study, running in your browser. Watch it predict, watch the world move, let it adapt, test what it remembers.">
+<title>Emerson, Alive | Substrate Research</title>
+<link rel="canonical" href="https://substrateresearch.org/projects/emerson/live/">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .exhibit{border:2px solid var(--ink);background:var(--card);padding:20px 22px;margin:18px 0;box-shadow:7px 7px 0 rgba(27,23,16,.9)}
+  .exhibit h2{margin:0 0 2px}
+  .exhibit .sub{color:var(--muted);font-style:italic;font-size:15.5px;margin-bottom:14px}
+  #stage{display:block;width:100%;background:#fffdf4;border:1px solid var(--ink)}
+  .readouts{display:flex;gap:26px;flex-wrap:wrap;margin:12px 2px 4px;font-size:15.5px}
+  .readouts b{color:var(--red);font-family:'Courier New',monospace}
+  .err-bad{color:var(--red) !important} .err-good{color:#20501f !important}
+  .acts{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 4px}
+  .acts button{background:var(--paper2);color:var(--ink);border:1px solid var(--ink);font:700 13px 'Courier New',monospace;
+    text-transform:uppercase;letter-spacing:.06em;padding:10px 13px;cursor:pointer}
+  .acts button:hover{background:var(--ink);color:var(--paper)}
+  .acts button:disabled{opacity:.38;cursor:default}
+  .acts button:disabled:hover{background:var(--paper2);color:var(--ink)}
+  .acts button.armed{background:var(--ink);color:var(--paper);box-shadow:inset 0 0 0 1px var(--paper)}
+  .actnote{color:var(--muted);font-size:15.5px;min-height:2.6em;margin-top:8px;font-style:italic}
+  .honest{border:1px solid var(--ink);background:var(--paper2);padding:16px 18px;font-size:15.5px;margin:22px 0}
+  .honest code{font-size:.78rem;word-break:break-all}
+  #loadstate{font-style:italic;color:var(--muted)}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="dateline"><div class="container"><span>Vol. I &middot; Est. 2026</span><span>Independent &amp; unaffiliated</span><span>All failures documented</span></div></div>
+<header>
+  <div class="nameplate"><a class="brandname" href="/">Substrate Research</a>
+    <div class="tagline">An institute for the study of machine intelligence, and for the record of its disappointments.</div></div>
+  <nav class="nav" aria-label="Main navigation"><div class="container">
+    <a href="/research/">Research</a><a href="/projects/" aria-current="page">Projects</a><a href="/obituaries/">Obituaries</a><a href="/claims/">Claims</a>
+    <a href="/stories/">Stories</a><a href="/evaluations/">Evaluations</a><a href="/publications/">Publications</a><a href="/perspectives/">Perspectives</a><a href="/about/">About</a>
+  </div></nav>
+</header>
+<main id="main">
+  <section class="pagehead"><div class="container">
+    <div class="kicker">Research programme &middot; Emerson &middot; Interactive exhibit</div>
+    <h1>Emerson, Alive</h1>
+    <p class="standfirst">Below is the world model from our published drift study, running in your
+    browser — its real weights, doing real inference, on the real track. It sees only where the
+    point <em>is</em>, never how fast it is moving, and must infer the rest. Watch it predict.
+    Then move its world, and watch what it costs. Then let it adapt, and test what it remembers.</p>
+  </div></section>
+
+  <div class="container"><hr class="rule">
+    <div class="exhibit">
+      <h2>The Track</h2>
+      <div class="sub">The red point is the world. The ring around the rail is Emerson's prediction of where it goes next.
+      Actions are random, as in the published protocol — Emerson predicts; it does not steer.
+      Each episode lasts fifty steps, as in the study; a fresh one begins on its own.</div>
+      <canvas id="stage" width="820" height="240"></canvas>
+      <div class="readouts">
+        <span>Episode <b id="ro-ep">–</b></span>
+        <span>Step <b id="ro-step">0</b></span>
+        <span>Rule <b id="ro-rule">fixed</b></span>
+        <span>Prediction error (last 50 steps) <b id="ro-err">—</b></span>
+        <span>Direction now <b id="ro-dir">+1.00</b></span>
+      </div>
+      <p id="loadstate">Bringing Emerson in — the two checkpoints together weigh about two megabytes…</p>
+      <div class="acts">
+        <button id="btn-start" disabled>I · Begin — the fixed rule</button>
+        <button id="btn-drift" disabled>II · Move the world</button>
+        <button id="btn-adapt" disabled>III · Let it adapt</button>
+        <button id="btn-retain" disabled>IV · Test what it remembers</button>
+        <button id="btn-pause" disabled>Pause</button>
+        <button id="btn-reset" disabled>Reset</button>
+      </div>
+      <div class="actnote" id="actnote">Act I. Under a rule that never changes, a memory of positions is enough to foresee. Emerson's published Phase 1 error: 0.170.</div>
+    </div>
+
+    <div class="honest"><strong>What you are looking at.</strong> The ring is drawn by the actual GRU
+    (hidden size 256; 201,473 parameters) from the published v0.12-drift study — seed 7 of that run,
+    whose five published metrics our export reproduced exactly. Act I and II use the checkpoint as it
+    stood after Phase 1 training. Act III swaps in the same model after the study's fine-tuning
+    (ten drifting episodes, ten replay episodes — the learning happened in the study, not in your
+    browser; nothing on this page trains). The JavaScript implementation of the model was verified
+    against the original PyTorch model on recorded episodes: the largest disagreement anywhere was
+    0.00000017 of a track width. Episode starting positions are drawn fresh in your browser, so your
+    episodes are yours; the model, the dynamics, and the drift are the study's own.
+    <br>Weights, for the sceptical — SHA-256 of the files your browser just downloaded:
+    <br>Phase 1 checkpoint: <code>dc76fa467cb07b8f2ff591f63135b2c9babaa8722d394bbfd93a9bce7a005785</code>
+    <br>Adapted checkpoint: <code>2c49a62fc38fc90789ef7a7af8c351b60e8cc9e3840d5c755a9058769ebb95f0</code></div>
+
+    <div class="ledger"><h3>The ledger, from the published run</h3>
+    <table class="exhibit-ledger">
+      <tr><td>Measure (T=100 drift, means over seeds 7–9)</td><td>Emerson (GRU h256) · the bar</td></tr>
+      <tr><td>Error before adaptation (the spike)</td><td>0.294 · —</td></tr>
+      <tr><td>Adapted to the drifting rule</td><td>0.259 · &lt; 0.313 <span class="pass">pass</span></td></tr>
+      <tr><td>Retention of the original rule</td><td>0.236 · &lt; 0.270 <span class="pass">pass</span></td></tr>
+      <tr><td>Generalisation to unseen starts</td><td>0.375 · &lt; 0.439 <span class="pass">pass</span></td></tr>
+    </table></div>
+    <p>Full account: <a href="/publications/the-advantage-survives-drift/">“The advantage survives drift”</a>
+    (Publications). The exhibit and the article describe the same study; the numbers above are its
+    numbers. The programme page is <a href="/projects/emerson/">Emerson</a>.</p>
+
+    <hr class="rule">
+    <h2>Record of changes</h2>
+    <p>22 November 2026 — Exhibit added: the published v0.12-drift model (seed 7) made runnable in
+    the browser, with the Phase 1 and fine-tuned checkpoints served alongside it and their SHA-256
+    hashes printed above. This page is never edited silently; changes will be recorded here, in order.</p>
+  </div>
+</main>
+<footer class="footer"><div class="container"><div>&copy; 2026 Substrate Research &middot; Independent research initiative<br><span class="colophon">Set in Georgia &amp; Courier. No neural networks were consulted about their feelings. Yes, the wall story is true. No, we will not be taking questions about the wall.</span></div><div><a href="/obituaries/">Obituaries</a> &middot; <a href="/publications/">Publications</a> &middot; <a href="/about/">About &amp; principles</a></div></div></footer>
+
+<script src="gru.js"></script>
+<script>
+'use strict';
+// ---- The world: an exact port of environment.py (v0.12-drift, amendment 1) ----
+const POS_MAX = 10, VEL_MAX = 2, EP_LEN = 50;
+let mode = 'fixed';               // fixed | drift | drift-adapted | retain
+let pos = 5, vel = 0.8, t = 0, epStep = 0, episode = 0;
+let running = false, timer = null;
+let models = null, model = null;  // {phase1, adapted} EmersonGRU instances
+const errs = [];
+
+function dirAt(tt) {
+  return (mode === 'fixed' || mode === 'retain') ? 1 : Math.sin(2 * Math.PI * (tt - 25) / 100);
+}
+function resetEpisode() {
+  pos = 1 + Math.random() * 8;            // env.reset(): pos ~ U(1,9)
+  vel = -1 + Math.random() * 2;           //               vel ~ U(-1,1)
+  epStep = 0; episode++;
+  if (model) model.reset();               // hidden state starts at zero, as in the study
+  document.getElementById('ro-ep').textContent = episode;
+}
+function stepWorld(a) {
+  const d = dirAt(epStep);
+  vel = Math.max(-VEL_MAX, Math.min(VEL_MAX, vel + 0.4 * d * a));
+  pos = pos + vel;
+  if (pos <= 0) { pos = 0; vel = -0.5 * vel; } else if (pos >= POS_MAX) { pos = POS_MAX; vel = -0.5 * vel; }
+  epStep++; t++;
+  return d;
+}
+// ---- Drawing (as the mock, unchanged in spirit) ----
+const cv = document.getElementById('stage'), ctx = cv.getContext('2d');
+function draw(ghost) {
+  const W = cv.width, H = cv.height, railY = 120, x0 = 46, x1 = W - 46;
+  ctx.clearRect(0, 0, W, H);
+  ctx.strokeStyle = '#a3987c'; ctx.fillStyle = '#453e2c'; ctx.font = '11px Georgia'; ctx.textAlign = 'center';
+  for (let i = 0; i <= 10; i++) { const x = x0 + (x1 - x0) * i / 10;
+    ctx.beginPath(); ctx.moveTo(x, railY - 14); ctx.lineTo(x, railY + 14); ctx.stroke(); ctx.fillText(i, x, railY + 34); }
+  if (mode === 'drift' || mode === 'drift-adapted') {
+    ctx.strokeStyle = '#8a6d2f'; ctx.lineWidth = 1.6; ctx.beginPath();
+    for (let tt = 0; tt < 100; tt++) { const x = x0 + (x1 - x0) * tt / 100, y = 52 - 26 * Math.sin(2 * Math.PI * (tt - 25) / 100);
+      tt === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+    ctx.stroke(); ctx.lineWidth = 1; ctx.fillStyle = '#453e2c'; ctx.textAlign = 'left';
+    ctx.fillText('the rule, breathing: direction(t) = sin(2π(t−25)/100)', x0, 20);
+    const cx = x0 + (x1 - x0) * (epStep % 100) / 100, cy = 52 - 26 * dirAt(epStep);
+    ctx.fillStyle = '#8f2418'; ctx.beginPath(); ctx.arc(cx, cy, 3.5, 0, 7); ctx.fill();
+  }
+  ctx.strokeStyle = '#1b1710'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x0, railY); ctx.lineTo(x1, railY); ctx.stroke(); ctx.lineWidth = 1;
+  if (ghost !== null && ghost !== undefined) {
+    const gx = x0 + (x1 - x0) * ghost / POS_MAX;
+    ctx.strokeStyle = '#1b1710'; ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.arc(gx, railY, 10, 0, 7); ctx.stroke(); ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(143,36,24,.4)'; ctx.beginPath(); ctx.moveTo(gx, railY);
+    ctx.lineTo(x0 + (x1 - x0) * pos / POS_MAX, railY); ctx.stroke();
+  }
+  const px = x0 + (x1 - x0) * pos / POS_MAX;
+  ctx.fillStyle = '#8f2418'; ctx.beginPath(); ctx.arc(px, railY, 7, 0, 7); ctx.fill();
+  ctx.fillStyle = '#fbf8ef'; ctx.beginPath(); ctx.arc(px, railY, 3, 0, 7); ctx.fill();
+}
+// ---- The loop: predict, then step, then score — the study's own order of business ----
+function tick() {
+  if (epStep >= EP_LEN) resetEpisode();
+  const a = Math.floor(Math.random() * 3) - 1;         // the protocol's random policy
+  const predPos = model.step(pos / POS_MAX, a) * POS_MAX;
+  const d = stepWorld(a);
+  const e = (predPos - pos) * (predPos - pos);          // MSE in position units, as published
+  errs.push(e); if (errs.length > 50) errs.shift();
+  const mse = errs.reduce((s, v) => s + v, 0) / errs.length;
+  document.getElementById('ro-step').textContent = t;
+  document.getElementById('ro-dir').textContent = (d >= 0 ? '+' : '') + d.toFixed(2);
+  const ro = document.getElementById('ro-err');
+  ro.textContent = mse.toFixed(3);
+  ro.className = mse < 0.30 ? 'err-good' : 'err-bad';
+  document.getElementById('ro-rule').textContent =
+    mode === 'fixed' ? 'fixed' : mode === 'drift' ? 'drifting — unadapted' :
+    mode === 'drift-adapted' ? 'drifting — adapted' : 'fixed — after adaptation';
+  draw(predPos);
+}
+function play() { if (!running) { running = true; timer = setInterval(tick, 110); document.getElementById('btn-pause').textContent = 'Pause'; } }
+function stopTimer() { if (running) { running = false; clearInterval(timer); timer = null; } }
+// ---- Acts ----
+const note = document.getElementById('actnote');
+const B = id => document.getElementById(id);
+function freshWorld(newMode, newModel) {           // an act change begins a fresh episode,
+  mode = newMode; model = newModel; errs.length = 0; // as every measurement in the study did
+  resetEpisode(); draw(null);
+}
+B('btn-start').onclick = () => { play(); B('btn-start').disabled = true; B('btn-start').classList.add('armed');
+  B('btn-drift').disabled = false; B('btn-pause').disabled = false; B('btn-reset').disabled = false;
+  note.textContent = 'Act I. Under a rule that never changes, a memory of positions is enough to foresee. Emerson\u2019s published Phase 1 error: 0.170.'; };
+B('btn-drift').onclick = () => { freshWorld('drift', models.phase1); B('btn-drift').disabled = true; B('btn-adapt').disabled = false;
+  note.textContent = 'Act II. The world now moves — the rule itself breathes, drawn above in gold. The model is unchanged and still believes the old rule. Watch the error climb: in the published run this spike reached 0.294.'; };
+B('btn-adapt').onclick = () => { freshWorld('drift-adapted', models.adapted); B('btn-adapt').disabled = true; B('btn-retain').disabled = false;
+  note.textContent = 'Act III. The fine-tuned checkpoint takes over — ten drifting episodes and ten reminders of the old rule, learned in the study. The error falls: published adapted error 0.259, against a bar of 0.313.'; };
+B('btn-retain').onclick = () => { freshWorld('retain', models.adapted); B('btn-retain').disabled = true;
+  note.textContent = 'Act IV. The original rule is restored, and the adapted model faces the first world it knew. Published retention: 0.236, against a bar of 0.270. What remains, and what changes, is the whole question.'; };
+B('btn-pause').onclick = () => { if (running) { stopTimer(); B('btn-pause').textContent = 'Resume'; } else play(); };
+B('btn-reset').onclick = () => { stopTimer();
+  t = 0; episode = 0; errs.length = 0; mode = 'fixed'; model = models.phase1;
+  ['btn-start','btn-drift','btn-adapt','btn-retain'].forEach(id => B(id).classList.remove('armed'));
+  B('btn-start').disabled = false; B('btn-drift').disabled = true; B('btn-adapt').disabled = true;
+  B('btn-retain').disabled = true; B('btn-pause').disabled = true; B('btn-pause').textContent = 'Pause';
+  document.getElementById('ro-step').textContent = '0';
+  document.getElementById('ro-dir').textContent = '+1.00';
+  document.getElementById('ro-err').textContent = '—';
+  document.getElementById('ro-rule').textContent = 'fixed';
+  note.textContent = 'Act I. Under a rule that never changes, a memory of positions is enough to foresee. Emerson\u2019s published Phase 1 error: 0.170.';
+  resetEpisode(); draw(null); };
+// ---- Bring Emerson in ----
+Promise.all([
+  fetch('weights/emerson-gru-h256-phase1.json').then(r => r.json()),
+  fetch('weights/emerson-gru-h256-adapted.json').then(r => r.json())
+]).then(([p1, ad]) => {
+  models = { phase1: new EmersonGRU(p1), adapted: new EmersonGRU(ad) };
+  model = models.phase1;
+  document.getElementById('loadstate').textContent = 'Emerson is here. Begin when you are ready.';
+  B('btn-start').disabled = false;
+  resetEpisode(); draw(null);
+}).catch(() => {
+  document.getElementById('loadstate').textContent =
+    'Emerson could not be brought in — the checkpoint files failed to load. The ledger below stands regardless; it never needed the exhibit.';
+});
+draw(null);
+</script>
+</body>
+</html>
